@@ -13,7 +13,7 @@ A [Claude Code](https://claude.com/claude-code) skill that scans your Xcode proj
 - **Code Quality** — Crash risks, deprecated APIs, private API usage, dynamic code execution, resource abuse patterns, biometric auth API compliance, on-device crypto mining detection
 - **Third-Party & Metadata** — SDK compliance, version/build numbers, platform references, Apple trademarks, extension ad prohibition, Firebase security rules
 
-**13 recommendations** covering performance, accessibility, localization, privacy nutrition labels, and more.
+**14 recommendations** covering performance, accessibility, localization, privacy nutrition labels, and more.
 
 ## Usage
 
@@ -42,7 +42,7 @@ app-store-review/
 ├── SKILL.md                        # Main skill instructions
 ├── references/
 │   ├── checks.md                   # All 53 check definitions with search patterns
-│   ├── recommendations.md          # 13 recommendation categories
+│   ├── recommendations.md          # 14 recommendation categories
 │   ├── approval-guide.md           # First-submission approval guide
 │   └── privacy-keys.md             # Info.plist privacy key reference
 └── evals/

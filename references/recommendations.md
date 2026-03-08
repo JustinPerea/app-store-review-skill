@@ -267,3 +267,45 @@ If MapKit or location services were found:
 **What to present**: Only include sections relevant to this specific app. A simple SpriteKit
 game with no backend gets none of these. A Firebase app with push, IAP, and Universal Links
 gets most of them. Tailor the checklist to what you actually found in the code.
+
+## R14: Manual review items
+
+These areas cannot be verified through automated code scanning but are common rejection
+reasons. Always include this section so the developer knows to check them separately.
+
+### Content Policy (Guideline 1.1)
+Apple rejects apps with objectionable, offensive, or inappropriate content. This requires
+human judgment — automated scanning cannot evaluate tone, context, or cultural sensitivity.
+- `[ ] All user-facing text reviewed for offensive, discriminatory, or insensitive language`
+- `[ ] No content that targets religion, race, sexual orientation, gender, or ethnic groups`
+- `[ ] No realistic portrayals of violence toward specific real-world people or groups`
+- `[ ] No false information or prank functionality (fake location trackers, anonymous calls)`
+- `[ ] No content exploiting current events, conflicts, or health crises`
+
+### Originality (Guideline 4.1)
+Apple rejects apps that are copies of existing popular apps with only superficial changes.
+- `[ ] App provides original value — not a clone of an existing App Store app`
+- `[ ] No use of another developer's app icon, brand name, or product name without permission`
+- `[ ] UI and feature set are sufficiently distinct from well-known competitors`
+
+### Intellectual Property (Guideline 5.2)
+Only use content you own or have licensed. Apple will pull apps after IP complaints.
+- `[ ] All images, icons, sounds, and fonts are owned or properly licensed`
+- `[ ] No copyrighted characters, logos, or brand imagery used without permission`
+- `[ ] No unauthorized use of third-party APIs (check each service's Terms of Use)`
+- `[ ] App Store screenshots and previews only show content you have rights to`
+
+### Gambling and Real-Money Gaming (Guideline 5.3)
+Apps involving real-money gambling must be geo-restricted and properly licensed.
+- `[ ] If app involves real-money wagering: proper gambling license obtained for each jurisdiction`
+- `[ ] Gambling features geo-restricted to licensed regions only`
+- `[ ] App is free on the App Store (gambling apps cannot have an upfront price)`
+- `[ ] No in-app purchase used for real-money gaming credit`
+- `[ ] No illegal gambling aids (card counters, probability calculators for casinos)`
+
+### Cross-Platform Considerations
+If the app also ships on Android or other platforms, ensure the iOS version is self-contained.
+- `[ ] No references to "Android", "Google Play", "Windows", or other platform app stores in UI`
+  (the automated check 2.33 catches literal strings, but also check images and screenshots)
+- `[ ] App Store screenshots do not show other platform UI or devices`
+- `[ ] React Native / Flutter / cross-platform framework artifacts are not visible to users`
