@@ -53,7 +53,7 @@ validation rules. Work through every check. For each issue found, note:
 - **Where**: File path and line number
 - **Fix**: Exactly what to change
 
-The 43 checks cover:
+The 53 checks cover:
 
 **Privacy & Data** — 2.1 (usage descriptions), 2.2 (privacy manifest), 2.15 (AI disclosure),
 2.17 (export compliance), 2.18 (SDK privacy manifests), 2.19 (ATT consistency),
@@ -61,19 +61,23 @@ The 43 checks cover:
 
 **UI & Assets** — 2.3 (app icon), 2.4 (launch screen), 2.13 (iPad support),
 2.20 (permission string quality), 2.21 (minimum functionality), 2.34 (broken links),
-2.38 (hardcoded prices)
+2.38 (hardcoded prices), 2.44 (placeholder/debug content)
 
 **Entitlements & Config** — 2.5 (entitlements), 2.9 (ATS), 2.11 (version numbers),
-2.12 (deployment target), 2.23 (extensions + App Groups), 2.30 (URL schemes), 2.41 (TestFlight)
+2.12 (deployment target), 2.23 (extensions + App Groups), 2.30 (URL schemes),
+2.41 (TestFlight), 2.45 (background mode justification)
 
 **Features & Compliance** — 2.6 (Sign in with Apple), 2.7 (account deletion), 2.8 (IAP),
-2.14 (UGC), 2.22 (subscription paywalls), 2.24 (HealthKit), 2.43 (Kids/COPPA)
+2.14 (UGC), 2.22 (subscription paywalls), 2.24 (HealthKit), 2.43 (Kids/COPPA),
+2.46 (restore purchases), 2.47 (loot box odds), 2.51 (VPN API), 2.53 (medical disclaimers)
 
 **Code Quality** — 2.10 (red flags), 2.16 (IPv4), 2.27 (private API), 2.28 (secrets),
-2.31 (availability checks), 2.32 (deprecated frameworks), 2.35 (dynamic code), 2.36 (GPL)
+2.31 (availability checks), 2.32 (deprecated frameworks), 2.35 (dynamic code), 2.36 (GPL),
+2.48 (resource abuse), 2.49 (biometric auth API), 2.52 (crypto mining)
 
 **Third-Party & Metadata** — 2.25 (feature flags), 2.26 (review notes), 2.33 (platform refs),
-2.37 (Apple trademarks), 2.39 (SDK config), 2.40 (binary size), 2.42 (Firebase rules)
+2.37 (Apple trademarks), 2.39 (SDK config), 2.40 (binary size), 2.42 (Firebase rules),
+2.50 (extension ad prohibition)
 
 ### Phase 3: Generate the report
 

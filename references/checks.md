@@ -1,6 +1,6 @@
 # Phase 2: Check Definitions
 
-This file contains the full definitions for all 43 checks. Run every check during the review.
+This file contains the full definitions for all 53 checks. Run every check during the review.
 
 ## Table of Contents
 
@@ -47,6 +47,16 @@ This file contains the full definitions for all 43 checks. Run every check durin
 - [2.41 TestFlight vs App Store differences](#241-testflight-vs-app-store-differences)
 - [2.42 Firebase / backend security rules](#242-firebase--backend-security-rules)
 - [2.43 Kids category / COPPA compliance](#243-kids-category--coppa-compliance)
+- [2.44 Placeholder and debug content](#244-placeholder-and-debug-content)
+- [2.45 Background mode justification](#245-background-mode-justification)
+- [2.46 Restore purchases requirement](#246-restore-purchases-requirement)
+- [2.47 Loot box odds disclosure](#247-loot-box-odds-disclosure)
+- [2.48 Resource abuse patterns](#248-resource-abuse-patterns)
+- [2.49 Biometric auth API compliance](#249-biometric-auth-api-compliance)
+- [2.50 Extension and widget ad prohibition](#250-extension-and-widget-ad-prohibition)
+- [2.51 VPN API compliance](#251-vpn-api-compliance)
+- [2.52 On-device crypto mining](#252-on-device-crypto-mining)
+- [2.53 Medical and health disclaimers](#253-medical-and-health-disclaimers)
 
 ---
 
@@ -810,3 +820,272 @@ rejected if they clearly target children but violate data collection rules.
 
 **Severity**: BLOCKER for behavioral ads/data collection in kids apps; WARNING for
 missing parental gates on external links
+
+## 2.44 Placeholder and debug content
+
+Apple requires all submissions be final, complete versions (Guideline 2.1). Apps with
+placeholder text, debug logging, or incomplete content are rejected immediately.
+
+**How to check**:
+
+1. **Search user-facing strings for placeholder content**:
+   - Regex: `(?i)(lorem\s+ipsum|coming\s+soon(?!\s*\()|TBD\b|placeholder|sample[_ ]data|test[_ ]image|dummy[_ ])`
+   - Also check `.strings`, `.stringsdict`, and `Localizable` files
+   - Check storyboard/XIB files for placeholder text in labels and buttons
+
+2. **Search for debug/test code that would show in production**:
+   - `print("` or `NSLog(` outside of `#if DEBUG` blocks
+   - `debugPrint(`, `dump(` in non-debug code paths
+   - Hardcoded test URLs: `localhost`, `127.0.0.1`, `staging.`, `dev.`, `test.`
+   - Test accounts or credentials: `test@`, `demo@`, `password123`
+
+3. **Check for TODO/FIXME in user-facing code**:
+   - `TODO:` or `FIXME:` comments in view controllers, SwiftUI views, or string files
+     are not themselves rejectable, but indicate incomplete work that may surface as
+     incomplete features
+
+**Note**: `#if DEBUG` blocks are fine — they don't run in release builds. Only flag
+debug code that would execute in production.
+
+**Severity**: BLOCKER for placeholder text in UI; WARNING for debug print statements
+in production code paths; INFO for TODO/FIXME density
+
+## 2.45 Background mode justification
+
+Every `UIBackgroundModes` entry in Info.plist must be justified by actual code that
+uses that capability (Guideline 2.5.4). Apple rejects apps that claim background modes
+they don't use — especially `audio` mode used just to keep the app alive.
+
+**How to check**:
+
+1. **Read UIBackgroundModes from Info.plist** for each target:
+   ```
+   <key>UIBackgroundModes</key>
+   <array><string>audio</string><string>location</string>...</array>
+   ```
+
+2. **For each declared mode, verify matching code exists**:
+
+   | Mode | Must find in code |
+   |------|------------------|
+   | `audio` | `AVAudioSession`, `AVAudioPlayer`, `AVAudioEngine`, `AudioKit`, `react-native-track-player` |
+   | `location` | `CLLocationManager`, `startUpdatingLocation`, `startMonitoringSignificantLocationChanges` |
+   | `fetch` | `BGAppRefreshTask`, `application(_:performFetchWithCompletionHandler:)`, `BGTaskScheduler` |
+   | `remote-notification` | `application(_:didReceiveRemoteNotification:fetchCompletionHandler:)`, Firebase messaging |
+   | `voip` | `PKPushRegistry`, `CXProvider`, `CallKit` |
+   | `bluetooth-central` | `CBCentralManager` |
+   | `bluetooth-peripheral` | `CBPeripheralManager` |
+   | `external-accessory` | `EAAccessoryManager` |
+   | `processing` | `BGProcessingTask`, `BGTaskScheduler` |
+
+3. **Flag silent audio abuse**: If `audio` mode is declared but the only audio code
+   plays silence or very short clips just to maintain background execution, flag as BLOCKER.
+
+**Severity**: BLOCKER for declared modes with no matching code; WARNING for modes
+that appear underutilized
+
+## 2.46 Restore purchases requirement
+
+Apps using In-App Purchase must provide a way to restore previously purchased
+non-consumable products and auto-renewable subscriptions (Guideline 3.1.1).
+Apple reviewers specifically check for this.
+
+**How to check**:
+
+1. **Detect IAP usage**: Search for:
+   - `import StoreKit`, `SKPaymentQueue`, `Product.products`, `SKProductsRequest`
+   - `Transaction.currentEntitlements`, `AppStore.sync()`
+
+2. **If IAP is present, search for restore mechanism**:
+   - `restoreCompletedTransactions`, `SKPaymentQueue.default().restoreCompletedTransactions()`
+   - `AppStore.sync()` (StoreKit 2)
+   - `Transaction.currentEntitlements` used in a restore flow
+   - UI element labeled "Restore" or "Restore Purchases"
+
+3. **Check that restore is accessible**: Should be reachable from settings, paywall,
+   or subscription management screen — not buried in a hidden debug menu.
+
+**Severity**: BLOCKER if IAP exists with no restore mechanism; N/A if no IAP
+
+## 2.47 Loot box odds disclosure
+
+Apps offering randomized virtual items for purchase must disclose the probability of
+receiving each type of item before the user pays (Guideline 3.1.1). This applies to
+gacha mechanics, mystery boxes, card packs, and similar systems.
+
+**How to check**:
+
+1. **Detect randomized purchase patterns**: Search for:
+   - `arc4random`, `Int.random`, `.random()`, `.shuffled()` near purchase/IAP code
+   - Terms in strings: `loot box`, `mystery box`, `card pack`, `gacha`, `crate`,
+     `chest`, `spin`, `lucky`, `random reward`, `drop rate`
+
+2. **If found, verify odds disclosure**:
+   - Look for probability display: percentages, odds tables, "drop rate" labels
+   - Should appear BEFORE the purchase button, not after
+   - Each rarity tier should have a visible percentage
+
+3. **If no randomized purchases found**: Mark as N/A
+
+**Severity**: BLOCKER if randomized purchases exist without odds disclosure; N/A if
+no randomized virtual item purchases
+
+## 2.48 Resource abuse patterns
+
+Apps that rapidly drain battery, generate excessive heat, or strain device resources
+will be rejected (Guideline 2.4.2). Apple specifically targets aggressive polling,
+continuous unnecessary location updates, and excessive disk writes.
+
+**How to check**:
+
+1. **Aggressive polling**: Search for timers or intervals under 10 seconds:
+   - `Timer.scheduledTimer(withTimeInterval:` with interval < 10
+   - `DispatchQueue.main.asyncAfter(deadline: .now() +` with delays < 5 in loops
+   - `Task.sleep(nanoseconds:` with very short sleeps in `while true` loops
+
+2. **Continuous location without distance filter**:
+   - `startUpdatingLocation()` without a `distanceFilter` set (defaults to
+     `kCLDistanceFilterNone` — updates on every movement)
+   - Flag if `distanceFilter` is not set or set to 0/`kCLDistanceFilterNone`
+   - Recommend: use `startMonitoringSignificantLocationChanges()` when continuous
+     precision isn't needed
+
+3. **Excessive disk writes**:
+   - Writing inside tight loops without batching
+   - `UserDefaults.synchronize()` called frequently (deprecated and unnecessary)
+
+**Severity**: WARNING for aggressive polling or continuous location without filter;
+INFO for `synchronize()` calls
+
+## 2.49 Biometric auth API compliance
+
+Apps using facial recognition for authentication must use the `LocalAuthentication`
+framework (Face ID/Touch ID), NOT ARKit face tracking or custom camera-based facial
+recognition (Guideline 2.5.13). Users under 13 must have an alternative.
+
+**How to check**:
+
+1. **Verify biometric auth uses correct API**:
+   - GOOD: `import LocalAuthentication`, `LAContext`, `evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics`
+   - BAD: `ARFaceTrackingConfiguration` used for authentication purposes
+   - BAD: `VNDetectFaceRectanglesRequest` or `CIDetector(ofType: CIDetectorTypeFace` used for auth
+
+2. **If Face ID is used, check for NSFaceIDUsageDescription**:
+   - Must be present in Info.plist with a clear explanation
+   - Missing description = crash on Face ID prompt
+
+3. **Check for alternative auth for minors**: If app might be used by under-13 users,
+   biometric auth should have a fallback (passcode, password)
+
+**Severity**: BLOCKER if ARKit or Vision framework used for authentication;
+WARNING if NSFaceIDUsageDescription missing when LocalAuthentication is imported;
+N/A if no biometric auth
+
+## 2.50 Extension and widget ad prohibition
+
+Display advertising is prohibited in app extensions, App Clips, widgets, notifications,
+keyboards, and watchOS apps (Guideline 2.5.18). Ads are only allowed in the main app
+binary.
+
+**How to check**:
+
+1. **Identify extension targets**: From `project.pbxproj`, find all targets with
+   product type `com.apple.product-type.app-extension`,
+   `com.apple.product-type.app-extension.messages`, `com.apple.product-type.watchkit2-app`,
+   or `appex` targets
+
+2. **In each extension target's source files, search for ad SDK imports**:
+   - `import GoogleMobileAds`, `GADBannerView`, `GADInterstitialAd`
+   - `import AdSupport`, `ASIdentifierManager`
+   - `import AppLovinSDK`, `import UnityAds`, `import FBAudienceNetwork`
+   - `import StoreKit` for `SKAdNetwork` (fine in main app, flag in extensions)
+   - Generic ad patterns: `AdBanner`, `InterstitialAd`, `RewardedAd`
+
+3. **Check WidgetKit bundles**: Widget extensions must not contain ad frameworks
+   in their linked libraries
+
+**Severity**: BLOCKER for ad SDK imports in extension/widget targets; N/A if no
+extensions or no ad SDKs
+
+## 2.51 VPN API compliance
+
+Apps providing VPN services must use the `NEVPNManager` API from the
+NetworkExtension framework (Guideline 5.4). Custom VPN implementations that bypass
+the system VPN are not permitted. VPN apps must also be from an organization account.
+
+**How to check**:
+
+1. **Detect VPN functionality**: Search for:
+   - `import NetworkExtension`, `NEVPNManager`, `NETunnelProviderManager`
+   - `NEPacketTunnelProvider`, `NEAppProxyProvider`
+   - VPN-related entitlements: `com.apple.developer.networking.vpn.api`
+   - Terms in UI: `VPN`, `virtual private network`, `tunnel`, `proxy`
+
+2. **If VPN functionality found**:
+   - Verify it uses `NEVPNManager` or `NETunnelProviderManager` (system API)
+   - Flag any custom socket-level VPN tunneling that bypasses NetworkExtension
+   - Check for `com.apple.developer.networking.vpn.api` entitlement
+
+3. **Check privacy policy compliance**: VPN apps must clearly declare data collection
+   practices and must not sell/share browsing data
+
+**Severity**: BLOCKER for VPN functionality without NEVPNManager; WARNING for VPN
+without clear privacy disclosures; N/A if no VPN functionality
+
+## 2.52 On-device crypto mining
+
+Apps may not perform cryptocurrency mining on-device (Guideline 3.1.5(ii)). This
+drains battery, generates heat, and strains hardware. Cloud-based mining status
+display is permitted.
+
+**How to check**:
+
+1. **Search for mining-related code patterns**:
+   - Function/variable names: `mine`, `mining`, `miner`, `hashRate`, `hash_rate`,
+     `proofOfWork`, `proof_of_work`, `nonce`, `difficulty`
+   - Crypto algorithm implementations: `SHA256` in tight loops, repeated hashing
+   - Terms in strings or comments: `bitcoin`, `ethereum`, `monero`, `mining pool`,
+     `block reward`, `hash power`
+
+2. **Distinguish display from execution**:
+   - Displaying mining status from a cloud service = OK
+   - Running hash computations locally to mine = BLOCKER
+   - Look for CPU-intensive loops doing cryptographic hashing
+
+3. **Check for crypto reward mechanisms**: Apps must not offer crypto for completing
+   tasks like downloading other apps, posting to social media, or referrals
+   (Guideline 3.1.5(v))
+
+**Severity**: BLOCKER for on-device mining; WARNING for crypto rewards for task
+completion; N/A if no crypto functionality
+
+## 2.53 Medical and health disclaimers
+
+Apps that provide medical information, health advice, or use device sensors for
+health-related measurements must include appropriate disclaimers (Guideline 1.4).
+Apps claiming to measure vital signs using only phone sensors (without approved
+external hardware) face immediate rejection.
+
+**How to check**:
+
+1. **Detect health/medical functionality**: Search for:
+   - `import HealthKit`, `HKHealthStore`, `HKQuantityType`
+   - Medical terminology in UI strings: `diagnosis`, `treatment`, `symptom`,
+     `blood pressure`, `heart rate`, `glucose`, `oxygen level`, `BMI`, `calorie`
+   - Device sensor health claims: using camera for heart rate, accelerometer for
+     tremor detection
+
+2. **If health functionality found, check for disclaimers**:
+   - Search for disclaimer text: `not intended to diagnose`, `consult.*doctor`,
+     `healthcare provider`, `medical advice`, `not a substitute`
+   - Should appear during onboarding or prominently in settings/about
+   - Must not be hidden in Terms of Service only
+
+3. **Flag prohibited sensor claims**:
+   - Camera-only blood pressure measurement
+   - Camera-only blood oxygen measurement
+   - Accelerometer-only glucose measurement
+   - Any vital sign measurement claiming clinical accuracy without FDA clearance
+
+**Severity**: BLOCKER for prohibited health measurement claims; WARNING for health
+features without disclaimers; N/A if no health functionality

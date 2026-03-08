@@ -4,14 +4,14 @@ A [Claude Code](https://claude.com/claude-code) skill that scans your Xcode proj
 
 ## What it checks
 
-**43 automated checks** across 6 categories:
+**53 automated checks** across 6 categories:
 
-- **Privacy & Data** — PrivacyInfo.xcprivacy, Required Reason APIs, privacy usage strings, App Tracking Transparency, IDFA
-- **UI & Assets** — App icon, launch storyboard, safe area, Dynamic Type, Dark Mode
-- **Entitlements & Config** — Entitlements consistency, App Groups, provisioning, build settings
-- **Features & Compliance** — Sign in with Apple, account deletion, in-app purchases, push notifications, export compliance
-- **Code Quality** — Crash risks (force unwraps, force try), deprecated APIs, synchronous network calls
-- **Third-Party & Metadata** — Private API usage, SDK compliance, version/build numbers, minimum functionality
+- **Privacy & Data** — PrivacyInfo.xcprivacy, Required Reason APIs, privacy usage strings, App Tracking Transparency, IDFA, sensitive data storage
+- **UI & Assets** — App icon, launch screen, iPad support, permission string quality, minimum functionality, placeholder/debug content detection, hardcoded prices
+- **Entitlements & Config** — Entitlements consistency, App Groups, background mode justification, build settings, URL schemes, TestFlight differences
+- **Features & Compliance** — Sign in with Apple, account deletion, in-app purchases, restore purchases, loot box odds disclosure, subscription paywalls, VPN API compliance, Kids/COPPA, medical disclaimers, export compliance
+- **Code Quality** — Crash risks, deprecated APIs, private API usage, dynamic code execution, resource abuse patterns, biometric auth API compliance, on-device crypto mining detection
+- **Third-Party & Metadata** — SDK compliance, version/build numbers, platform references, Apple trademarks, extension ad prohibition, Firebase security rules
 
 **13 recommendations** covering performance, accessibility, localization, privacy nutrition labels, and more.
 
@@ -41,7 +41,7 @@ The skill generates a detailed report with:
 app-store-review/
 ├── SKILL.md                        # Main skill instructions
 ├── references/
-│   ├── checks.md                   # All 43 check definitions with search patterns
+│   ├── checks.md                   # All 53 check definitions with search patterns
 │   ├── recommendations.md          # 13 recommendation categories
 │   ├── approval-guide.md           # First-submission approval guide
 │   └── privacy-keys.md             # Info.plist privacy key reference
