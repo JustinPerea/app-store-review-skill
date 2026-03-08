@@ -1,0 +1,82 @@
+[
+  {
+    "query": "I'm about to submit my fitness tracking app to the App Store and I'm worried about rejection. Can you scan my Xcode project at ~/Projects/FitTrack/FitTrack.xcodeproj? I'm using HealthKit and location services and I want to make sure all my privacy usage descriptions are correct in Info.plist before I hit submit.",
+    "should_trigger": true
+  },
+  {
+    "query": "My app just got rejected by App Review with guideline 5.1.1 — they said I'm missing a privacy manifest. The project is at /Users/justinperea/Documents/Projects/ara/ara.xcodeproj. Can you check what's wrong and tell me what PrivacyInfo.xcprivacy entries I need to add? I'm using URLSession and UserDefaults directly.",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to push a TestFlight build tonight for my client's restaurant ordering app. Before I archive, can you do a pre-submission check on the project? It's at ~/Code/OrderUp/OrderUp.xcworkspace. I added Sign in with Apple last week but I'm not sure if I configured the entitlements correctly.",
+    "should_trigger": true
+  },
+  {
+    "query": "Hey, quick one — I have an iOS app that lets users create accounts with email/password. Apple's been cracking down on the account deletion requirement lately. Can you scan my project at ~/Apps/Chatly and check if I'm going to have issues with guideline 5.1.1(v)? I want to make sure I'm not missing anything obvious before review.",
+    "should_trigger": true
+  },
+  {
+    "query": "I keep getting my app icon rejected. The asset catalog is at ~/Projects/WeatherNow/WeatherNow/Assets.xcassets and I think I might be missing some sizes or have transparency in the icons. Can you review my icon setup and also check if my Info.plist has all the required keys for a weather app that uses location?",
+    "should_trigger": true
+  },
+  {
+    "query": "We're preparing our iPad app for App Store submission. It uses the camera for document scanning, accesses the photo library, and sends push notifications. I want to make sure the NSCameraUsageDescription, NSPhotoLibraryUsageDescription, and all the other privacy strings are actually present and descriptive enough. Project path is /Users/justinperea/Work/DocScanner.",
+    "should_trigger": true
+  },
+  {
+    "query": "Apple rejected my app update saying there's an entitlement mismatch — something about my provisioning profile not matching the capabilities in my entitlements file. The project is at ~/Projects/MeditateApp/MeditateApp.xcodeproj. Can you compare my .entitlements file against what's configured in the project and tell me what's off?",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm wrapping up a SwiftUI app that uses Core Location, Bluetooth LE, and the microphone for an accessibility feature. I've never submitted to the App Store before and I'm paranoid about rejections. Can you do a full review of my project at ~/Developer/AccessHelper to flag anything that could get me rejected? I want to catch everything before I even create the archive.",
+    "should_trigger": true
+  },
+  {
+    "query": "My Info.plist seems like it's missing a bunch of stuff. The app uses background audio, background fetch, and remote notifications, but I don't think I declared the UIBackgroundModes correctly. It's a podcast app at /Users/justinperea/Projects/PodStream — can you review the plist and entitlements for anything App Review would flag?",
+    "should_trigger": true
+  },
+  {
+    "query": "I just integrated a third-party analytics SDK (Mixpanel) and a crash reporter (Sentry) into my iOS app. I heard Apple now requires a privacy manifest that declares what APIs these SDKs use and their tracking domains. Can you scan my project at ~/Code/ShopList and check if my PrivacyInfo.xcprivacy covers everything, or if I need to add entries for these SDKs?",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to get my Android app ready for the Google Play Store review. I'm using Kotlin and Jetpack Compose, and I want to make sure my AndroidManifest.xml has all the right permissions declared. The project is at ~/AndroidStudioProjects/FitTrack. Can you check for common Play Store rejection reasons?",
+    "should_trigger": false
+  },
+  {
+    "query": "Can you help me write a privacy policy for my SaaS web app? It collects user emails, stores payment info via Stripe, and uses Google Analytics. I need it to be GDPR compliant and I want to host it at /privacy on my Next.js site. I don't know where to start with the legal language.",
+    "should_trigger": false
+  },
+  {
+    "query": "I'm trying to fix a Swift compiler error in my iOS app. The build fails with 'Cannot convert value of type String to expected argument type Int' on line 47 of ContentView.swift. The project is at ~/Projects/MyApp. Can you look at the code and help me figure out the type mismatch?",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to deploy my React web application to Vercel. I've been getting build failures related to my next.config.js. The app uses server-side rendering and I have some API routes that talk to a Postgres database. Can you review my deployment configuration and help me get this live?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to set up code signing for my macOS desktop app distributed outside the App Store via Developer ID. I need to notarize it with Apple's notary service. The project is at ~/Projects/DesktopTool — can you walk me through the stapling and notarization process using xcrun notarytool?",
+    "should_trigger": false
+  },
+  {
+    "query": "Can you write unit tests for my Swift networking layer? I have a URLSession-based API client in ~/Projects/MyApp/Sources/Networking/APIClient.swift and I want to mock the responses using URLProtocol. I need tests for the auth flow, error handling, and retry logic.",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to review the performance of my iOS app — it's dropping frames during scrolling in a UICollectionView with lots of images. Can you help me profile this using Instruments and suggest optimizations? The cell reuse seems off and I think I'm decoding images on the main thread.",
+    "should_trigger": false
+  },
+  {
+    "query": "I'm building a Flutter app that targets both iOS and Android. Right now I'm stuck on getting the Google Maps plugin to work on the Android side — it crashes on launch with a missing API key error. The project is at ~/Projects/TravelApp. Can you check my android/app/src/main/AndroidManifest.xml?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to set up a CI/CD pipeline with GitHub Actions for my iOS project. I need it to run tests on every PR, and then automatically archive and upload to TestFlight on merges to main. Can you help me write the workflow YAML? I'm using fastlane for signing.",
+    "should_trigger": false
+  },
+  {
+    "query": "Can you help me implement App Store Server Notifications v2 on my backend? I need to handle subscription renewal, refund, and revocation events. My server is a Node.js Express app and I need to verify Apple's signed JWS transactions. The backend code is at ~/Projects/api-server.",
+    "should_trigger": false
+  }
+]

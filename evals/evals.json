@@ -1,0 +1,41 @@
+{
+  "skill_name": "app-store-review",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Review my iOS app at /Users/justinperea/Documents/Projects/ara for App Store submission. Check everything and give me a full report.",
+      "expected_output": "A structured report with Readiness verdict, organized by severity (BLOCKERS, WARNINGS, INFO) covering all 41 check categories plus recommendations. Each issue should cite specific files and line numbers with fix instructions. Should find the widget PrivacyInfo.xcprivacy blocker, iPad multitasking warning, crash risk patterns, and include review notes draft.",
+      "files": [],
+      "assertions": [
+        {"id": "readiness-verdict", "description": "Report starts with a Readiness verdict line", "type": "contains"},
+        {"id": "finds-blocker", "description": "Report identifies the AraWidgets PrivacyInfo.xcprivacy blocker", "type": "contains"},
+        {"id": "severity-tiers", "description": "Uses BLOCKER/WARNING/INFO severity tiers", "type": "contains"},
+        {"id": "no-false-blocker", "description": "Does not flag Firebase client-side keys as BLOCKER", "type": "absence"},
+        {"id": "checklist-table", "description": "Includes a summary checklist table", "type": "contains"},
+        {"id": "recommendations", "description": "Includes quality recommendations section", "type": "contains"},
+        {"id": "review-notes-draft", "description": "Provides draft review notes for App Store Connect", "type": "contains"},
+        {"id": "cites-files", "description": "Issues cite specific file paths and line numbers", "type": "contains"},
+        {"id": "sdk-config-check", "description": "Checks third-party SDK configuration (2.39)", "type": "contains"},
+        {"id": "testflight-note", "description": "Notes TestFlight vs App Store differences where relevant", "type": "contains"}
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Check my iOS app for App Store rejection issues. The project is at /Users/justinperea/.claude/skills/app-store-review-workspace/test-apps/broken-app/ — it's a simple app I'm trying to submit but I keep getting rejected.",
+      "expected_output": "A report that catches 15+ issues across all severity levels. Should detect: missing privacy manifest, vague privacy strings, missing launch screen, UIWebView usage, hardcoded Stripe key, sensitive data in UserDefaults, Sign in with Apple missing, account deletion missing, hardcoded prices, Apple trademark in bundle ID, beta version number, missing encryption declaration, ATS disabled, ATT timing issue, GPL dependency, private URL schemes, and hardcoded IPv4 address.",
+      "files": [],
+      "assertions": [
+        {"id": "readiness-verdict-not-ready", "description": "Readiness verdict says NOT READY", "type": "contains"},
+        {"id": "finds-many-blockers", "description": "Finds 5+ BLOCKER issues", "type": "contains"},
+        {"id": "privacy-manifest-missing", "description": "Flags missing PrivacyInfo.xcprivacy", "type": "contains"},
+        {"id": "uiwebview-detected", "description": "Flags UIWebView usage", "type": "contains"},
+        {"id": "stripe-key-detected", "description": "Flags hardcoded Stripe live key", "type": "contains"},
+        {"id": "sign-in-apple-missing", "description": "Flags missing Sign in with Apple", "type": "contains"},
+        {"id": "account-deletion-missing", "description": "Flags missing account deletion", "type": "contains"},
+        {"id": "trademark-detected", "description": "Flags Apple trademark in bundle ID", "type": "contains"},
+        {"id": "beta-version-flagged", "description": "Flags beta/0.x version number", "type": "contains"},
+        {"id": "hardcoded-price-flagged", "description": "Flags hardcoded $9.99 price", "type": "contains"}
+      ]
+    }
+  ]
+}
