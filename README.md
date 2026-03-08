@@ -44,14 +44,16 @@ These aren't hard problems. They're easy to miss, tedious to check manually, and
 
 > **Requires**: [Claude Code](https://claude.com/claude-code) (Anthropic's CLI for Claude)
 
-**1.** Clone and install the skill:
+**1.** Install the skill:
 
 ```bash
-git clone https://github.com/JustinPerea/app-store-review-skill.git
+npx skills add JustinPerea/app-store-review-skill
 ```
 
+Or with Claude Code directly:
+
 ```
-/install-skill /path/to/app-store-review-skill
+/install-skill https://github.com/JustinPerea/app-store-review-skill
 ```
 
 **2.** Open any Xcode project and say:
