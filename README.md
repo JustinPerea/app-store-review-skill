@@ -6,7 +6,7 @@
   <p align="center">
     <a href="#quick-start">Quick Start</a> &nbsp;&bull;&nbsp;
     <a href="#what-it-catches">What It Catches</a> &nbsp;&bull;&nbsp;
-    <a href="#example-output">Example Output</a> &nbsp;&bull;&nbsp;
+    <a href="#what-the-report-looks-like">Report Preview</a> &nbsp;&bull;&nbsp;
     <a href="#how-it-works">How It Works</a>
   </p>
 </p>
@@ -161,49 +161,49 @@ Beyond pass/fail checks, the report includes actionable recommendations:
 - **R13** External verification checklist (Firebase, push certs, Universal Links)
 - **R14** Manual review items (content policy, IP, gambling — things code can't check)
 
-## Example Output
+## What the Report Looks Like
 
-Here's what a real report looks like (abbreviated):
+### Instant verdict
 
-```
-# App Store Review Report — MyApp
+One glance tells you if you're ready to submit. The header shows your readiness status, blocker/warning/info counts, and the number of checks run.
 
-**Readiness: NOT READY** — 3 blockers must be fixed before submission.
+<p align="center">
+  <img src="assets/section-verdict.png" alt="Verdict header showing NOT READY status with blocker and warning counts" width="700">
+</p>
 
-## BLOCKERS
+### Blockers — things Apple will reject
 
-### [B1] Missing Privacy Manifest (PrivacyInfo.xcprivacy)
-- **Guideline**: 5.1.1 (ITMS-91053)
-- **File**: MyApp/MyApp.xcodeproj
-- **Issue**: App uses UserDefaults and URLSession but has no PrivacyInfo.xcprivacy.
-  Since May 2024, Apple rejects at upload time.
-- **Fix**: Create PrivacyInfo.xcprivacy with NSPrivacyAccessedAPICategoryUserDefaults
-  (reason CA92.1) and NSPrivacyAccessedAPICategoryURLSession (reason CE52.1).
+Each blocker cites the exact Apple guideline, the file and line where the problem lives, and a specific fix you can copy-paste. No guessing.
 
-### [B2] Missing Account Deletion
-- **Guideline**: 5.1.1(v)
-- **File**: MyApp/Settings/SettingsView.swift
-- **Issue**: App supports Sign in with Apple but has no account deletion flow.
-- **Fix**: Add "Delete Account" in Settings that calls your backend deletion
-  endpoint and revokes Apple Sign In tokens via Token Revocation endpoint.
+<p align="center">
+  <img src="assets/section-blockers.png" alt="Blocker cards showing missing privacy manifest and account deletion issues" width="700">
+</p>
 
-## WARNINGS
+### Warnings — likely rejections
 
-### [W1] Vague Camera Permission String
-- **Guideline**: 5.1.1
-- **File**: MyApp/Info.plist
-- **Issue**: NSCameraUsageDescription says "Camera access is required" — too vague.
-- **Fix**: "Used to scan documents and capture receipt photos for expense reports"
+Same format as blockers, but for issues that are likely (not guaranteed) to cause rejection. Fix these too.
 
-## Checklist
-[x] Privacy manifest — 1 BLOCKER
-[ ] App icon — OK
-[ ] Sign in with Apple — OK
-[x] Account deletion — 1 BLOCKER
-[x] Permission strings — 1 WARNING
-```
+<p align="center">
+  <img src="assets/section-warnings.png" alt="Warning card showing vague camera permission string" width="700">
+</p>
 
-Each issue includes the **exact file path**, **line number** where possible, the **Apple guideline** being violated, and a **specific fix** — not generic advice.
+### Submission checklist
+
+A quick pass/fail table across every category so you can see what's clean and what needs work.
+
+<p align="center">
+  <img src="assets/section-checklist.png" alt="Checklist table with pass/fail/warning status for each category" width="700">
+</p>
+
+### Targeted recommendations
+
+Not a generic list — only recommendations relevant to what was actually found in your code. Includes a draft of App Store review notes you can paste directly into App Store Connect.
+
+<p align="center">
+  <img src="assets/section-recommendations.png" alt="Recommendation items with numbered badges" width="700">
+</p>
+
+Every issue includes the **exact file path**, **line number** where possible, the **Apple guideline** being violated, and a **specific fix** — not generic advice.
 
 ## How It Works
 
