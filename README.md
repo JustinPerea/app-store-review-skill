@@ -4,6 +4,13 @@
     <strong>Stop getting rejected. Catch every issue before Apple does.</strong>
   </p>
   <p align="center">
+    <a href="https://github.com/JustinPerea/app-store-review-skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+    <img src="https://img.shields.io/badge/checks-53-brightgreen.svg" alt="53 Checks">
+    <img src="https://img.shields.io/badge/recommendations-14-blue.svg" alt="14 Recommendations">
+    <img src="https://img.shields.io/badge/eval_pass_rate-100%25-brightgreen.svg" alt="100% Eval Pass Rate">
+    <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/works_with-Claude_Code-cc785c.svg" alt="Works with Claude Code"></a>
+  </p>
+  <p align="center">
     <a href="#quick-start">Quick Start</a> &nbsp;&bull;&nbsp;
     <a href="#what-it-catches">What It Catches</a> &nbsp;&bull;&nbsp;
     <a href="#what-the-report-looks-like">Report Preview</a> &nbsp;&bull;&nbsp;
@@ -35,19 +42,25 @@ These aren't hard problems. They're easy to miss, tedious to check manually, and
 
 ## Quick Start
 
-Install the skill in Claude Code:
+> **Requires**: [Claude Code](https://claude.com/claude-code) (Anthropic's CLI for Claude)
+
+**1.** Clone and install the skill:
+
+```bash
+git clone https://github.com/JustinPerea/app-store-review-skill.git
+```
 
 ```
-/install-skill /path/to/app-store-review
+/install-skill /path/to/app-store-review-skill
 ```
 
-Then open any Xcode project and say:
+**2.** Open any Xcode project and say:
 
 ```
 Review my app for the App Store
 ```
 
-That's it. You'll get a full report in about 3–5 minutes.
+That's it. Full report in about 3–5 minutes.
 
 ## What It Catches
 
@@ -243,6 +256,12 @@ The skill has been validated against real-world iOS projects:
 
 100% pass rate across 29 assertions covering accuracy, false-positive avoidance, and report quality.
 
+## Contributing
+
+Found a false positive? Know a rejection reason we're missing? [Open an issue](https://github.com/JustinPerea/app-store-review-skill/issues) — include the Apple guideline number if you have it.
+
+PRs welcome. If you're adding a new check, add it to `references/checks.md` following the existing format and include the regex pattern and severity level.
+
 ## License
 
-MIT
+MIT — use it, fork it, ship your app.
