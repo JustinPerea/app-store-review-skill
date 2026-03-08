@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Store Review Report — MyApp</title>
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    background: #f0f0f3;
+    color: #1d1d1f;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 40px 20px;
+    line-height: 1.5;
+  }
+
+  .report {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.04),
+      0 4px 12px rgba(0,0,0,0.06),
+      0 12px 36px rgba(0,0,0,0.06);
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 40px 44px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .header-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .header-timestamp {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 4px;
+    letter-spacing: -0.3px;
+  }
+
+  .header h1 span {
+    color: rgba(255,255,255,0.45);
+    font-weight: 400;
+  }
+
+  .verdict-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 10px 20px;
+    background: rgba(255, 59, 48, 0.12);
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff453a;
+    letter-spacing: 0.3px;
+  }
+
+  .verdict-badge .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(255, 59, 48, 0.2);
+    border-radius: 50%;
+    font-size: 12px;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-pill .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .stat-pill.blocker {
+    background: rgba(255, 59, 48, 0.12);
+    color: #ff6961;
+  }
+  .stat-pill.blocker .dot { background: #ff453a; }
+
+  .stat-pill.warning {
+    background: rgba(255, 159, 10, 0.12);
+    color: #ffa940;
+  }
+  .stat-pill.warning .dot { background: #ff9f0a; }
+
+  .stat-pill.info {
+    background: rgba(10, 132, 255, 0.12);
+    color: #5aafff;
+  }
+  .stat-pill.info .dot { background: #0a84ff; }
+
+  /* ── Content area ───────────────────────────────── */
+  .content {
+    padding: 36px 44px 44px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #86868b;
+    margin-bottom: 16px;
+    margin-top: 36px;
+  }
+
+  .section-title:first-child {
+    margin-top: 0;
+  }
+
+  /* ── Finding cards ──────────────────────────────── */
+  .finding-card {
+    background: #fff;
+    border: 1px solid #e8e8ed;
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 12px;
+    border-left: 4px solid transparent;
+    transition: box-shadow 0.15s ease;
+  }
+
+  .finding-card.blocker {
+    border-left-color: #ff453a;
+  }
+
+  .finding-card.warning {
+    border-left-color: #ff9f0a;
+  }
+
+  .finding-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .finding-id-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .finding-id {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+
+  .finding-id.blocker {
+    background: #ff453a;
+    color: #fff;
+  }
+
+  .finding-id.warning {
+    background: #ff9f0a;
+    color: #fff;
+  }
+
+  .finding-title {
+    font-size: 15px;
+    font-weight: 650;
+    color: #1d1d1f;
+    letter-spacing: -0.1px;
+  }
+
+  .finding-guideline {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #86868b;
+    background: #f5f5f7;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+
+  .finding-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .finding-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, Consolas, monospace;
+    color: #0a84ff;
+    background: rgba(10, 132, 255, 0.06);
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .finding-file .file-icon {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .finding-body p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #48484a;
+  }
+
+  .finding-body p + p {
+    margin-top: 8px;
+  }
+
+  .finding-body .label {
+    font-weight: 650;
+    color: #1d1d1f;
+  }
+
+  .fix-block {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: #f0faf0;
+    border-radius: 8px;
+    border: 1px solid #d4edda;
+  }
+
+  .fix-block p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #2d6a4f;
+  }
+
+  .fix-block .fix-label {
+    font-weight: 700;
+    color: #1b7340;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── Checklist table ────────────────────────────── */
+  .checklist {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e8e8ed;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 13.5px;
+  }
+
+  .checklist tr {
+    border-bottom: 1px solid #f2f2f7;
+  }
+
+  .checklist tr:last-child {
+    border-bottom: none;
+  }
+
+  .checklist tr:last-child td {
+    border-bottom: none;
+  }
+
+  .checklist td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #f2f2f7;
+    vertical-align: middle;
+  }
+
+  .checklist td:first-child {
+    width: 36px;
+    text-align: center;
+    font-size: 15px;
+    padding-right: 4px;
+  }
+
+  .checklist td:nth-child(2) {
+    font-weight: 500;
+    color: #1d1d1f;
+  }
+
+  .checklist td:last-child {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+    padding-left: 12px;
+  }
+
+  .status-ok {
+    color: #30d158;
+  }
+
+  .status-blocker {
+    color: #ff453a;
+    font-weight: 700;
+  }
+
+  .status-warning {
+    color: #ff9f0a;
+    font-weight: 700;
+  }
+
+  .checklist tr.row-ok td:nth-child(2) {
+    color: #48484a;
+  }
+
+  .checklist tr.row-blocker {
+    background: rgba(255, 59, 48, 0.02);
+  }
+
+  .checklist tr.row-warning {
+    background: rgba(255, 159, 10, 0.02);
+  }
+
+  /* ── Recommendations ────────────────────────────── */
+  .rec-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .rec-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f2f2f7;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #48484a;
+  }
+
+  .rec-list li:last-child {
+    border-bottom: none;
+  }
+
+  .rec-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 22px;
+    padding: 0 6px;
+    background: rgba(10, 132, 255, 0.08);
+    color: #0a84ff;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Footer ─────────────────────────────────────── */
+  .footer {
+    padding: 20px 44px;
+    background: #fafafa;
+    border-top: 1px solid #f2f2f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: #aeaeb2;
+  }
+
+  .footer-text a {
+    color: #86868b;
+    text-decoration: none;
+  }
+
+  .footer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #86868b;
+    font-weight: 600;
+  }
+
+  .footer-badge .claude-dot {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #d97706, #c2410c);
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<div class="report">
+  <!-- ── Header ──────────────────────────────────── -->
+  <div class="header">
+    <div class="header-top">
+      <span class="header-label">App Store Review Report</span>
+      <span class="header-timestamp">Generated Mar 8, 2026 at 2:14 PM</span>
+    </div>
+    <h1>MyApp <span>v2.3.1 (47)</span></h1>
+
+    <div class="verdict-badge">
+      <span class="icon">&#10005;</span>
+      NOT READY &mdash; 3 blockers must be fixed before submission
+    </div>
+
+    <div class="stats-row">
+      <span class="stat-pill blocker"><span class="dot"></span>3 BLOCKERS</span>
+      <span class="stat-pill warning"><span class="dot"></span>2 WARNINGS</span>
+      <span class="stat-pill info"><span class="dot"></span>4 INFO</span>
+    </div>
+  </div>
+
+  <!-- ── Content ─────────────────────────────────── -->
+  <div class="content">
+
+    <!-- Blockers -->
+    <div class="section-title">Blockers</div>
+
+    <div class="finding-card blocker">
+      <div class="finding-card-header">
+        <div class="finding-id-title">
+          <span class="finding-id blocker">B1</span>
+          <span class="finding-title">Missing Privacy Manifest (PrivacyInfo.xcprivacy)</span>
+        </div>
+        <span class="finding-guideline">5.1.1 &middot; ITMS-91053</span>
+      </div>
+      <div class="finding-meta">
+        <span class="finding-file"><span class="file-icon">&#9113;</span> MyApp/MyApp.xcodeproj</span>
+      </div>
+      <div class="finding-body">
+        <p>App uses <code>UserDefaults</code> and <code>URLSession</code> but has no <code>PrivacyInfo.xcprivacy</code>. Since May 2024, Apple rejects apps at upload without a privacy manifest declaring required API usage reasons.</p>
+        <div class="fix-block">
+          <span class="fix-label">Suggested fix</span>
+          <p>Create <code>PrivacyInfo.xcprivacy</code> with <code>NSPrivacyAccessedAPICategoryUserDefaults</code> (reason <code>CA92.1</code>) and <code>NSPrivacyAccessedAPICategoryURLSession</code> (reason <code>CE52.1</code>).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="finding-card blocker">
+      <div class="finding-card-header">
+        <div class="finding-id-title">
+          <span class="finding-id blocker">B2</span>
+          <span class="finding-title">Missing Account Deletion</span>
+        </div>
+        <span class="finding-guideline">5.1.1(v)</span>
+      </div>
+      <div class="finding-meta">
+        <span class="finding-file"><span class="file-icon">&#9113;</span> MyApp/Settings/SettingsView.swift</span>
+      </div>
+      <div class="finding-body">
+        <p>App supports account creation via Sign in with Apple but has no account deletion flow. Required since June 2022 &mdash; apps that let users create accounts must also let them delete their data.</p>
+        <div class="fix-block">
+          <span class="fix-label">Suggested fix</span>
+          <p>Add a &ldquo;Delete Account&rdquo; option in Settings that calls your backend deletion endpoint and revokes Apple Sign In tokens via <code>ASAuthorizationAppleIDProvider.revokeToken</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warnings -->
+    <div class="section-title">Warnings</div>
+
+    <div class="finding-card warning">
+      <div class="finding-card-header">
+        <div class="finding-id-title">
+          <span class="finding-id warning">W1</span>
+          <span class="finding-title">Vague Camera Permission String</span>
+        </div>
+        <span class="finding-guideline">5.1.1</span>
+      </div>
+      <div class="finding-meta">
+        <span class="finding-file"><span class="file-icon">&#9113;</span> MyApp/Info.plist</span>
+      </div>
+      <div class="finding-body">
+        <p><code>NSCameraUsageDescription</code> currently says <em>&ldquo;Camera access is required&rdquo;</em> &mdash; this is too vague and is a common reason for rejection. Apple requires purpose strings to explain exactly why the app needs the permission.</p>
+        <div class="fix-block">
+          <span class="fix-label">Suggested fix</span>
+          <p>Change to: <em>&ldquo;Used to scan documents and capture photos for your reports&rdquo;</em></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <div class="section-title">Submission Checklist</div>
+
+    <table class="checklist">
+      <tr class="row-ok">
+        <td>&#10003;</td>
+        <td>App icon</td>
+        <td class="status-ok">OK</td>
+      </tr>
+      <tr class="row-ok">
+        <td>&#10003;</td>
+        <td>Launch screen</td>
+        <td class="status-ok">OK</td>
+      </tr>
+      <tr class="row-blocker">
+        <td>&#10007;</td>
+        <td>Privacy manifest</td>
+        <td class="status-blocker">BLOCKER</td>
+      </tr>
+      <tr class="row-ok">
+        <td>&#10003;</td>
+        <td>Sign in with Apple</td>
+        <td class="status-ok">OK</td>
+      </tr>
+      <tr class="row-blocker">
+        <td>&#10007;</td>
+        <td>Account deletion</td>
+        <td class="status-blocker">BLOCKER</td>
+      </tr>
+      <tr class="row-warning">
+        <td>&#9888;</td>
+        <td>Permission strings</td>
+        <td class="status-warning">WARNING</td>
+      </tr>
+      <tr class="row-ok">
+        <td>&#10003;</td>
+        <td>Export compliance</td>
+        <td class="status-ok">OK</td>
+      </tr>
+      <tr class="row-blocker">
+        <td>&#10007;</td>
+        <td>Version numbers</td>
+        <td class="status-blocker">BLOCKER</td>
+      </tr>
+      <tr class="row-ok">
+        <td>&#10003;</td>
+        <td>iPad support</td>
+        <td class="status-ok">OK</td>
+      </tr>
+    </table>
+
+    <!-- Recommendations -->
+    <div class="section-title">Recommendations</div>
+
+    <ul class="rec-list">
+      <li>
+        <span class="rec-num">R1</span>
+        <span>Add accessibility labels to all interactive elements &mdash; improves VoiceOver support and reduces risk of accessibility-related rejection.</span>
+      </li>
+      <li>
+        <span class="rec-num">R7</span>
+        <span>Declare Camera and Photo Library usage in App Store Connect privacy nutrition labels to match your <code>Info.plist</code> declarations.</span>
+      </li>
+      <li>
+        <span class="rec-num">R14</span>
+        <span>Manual review recommended &mdash; verify content policy compliance and confirm all third-party IP licensing is in order.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Footer ──────────────────────────────────── -->
+  <div class="footer">
+    <span class="footer-text">Analyzed 47 source files &middot; 3 entitlements &middot; 2 frameworks</span>
+    <span class="footer-badge"><span class="claude-dot"></span> Generated by app-store-review skill</span>
+  </div>
+</div>
+
+</body>
+</html>
