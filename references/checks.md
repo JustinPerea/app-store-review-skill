@@ -335,7 +335,7 @@ rejects vague or generic strings (Guideline 5.1.1).
 - Strings that don't explain the specific use case ("This app requires microphone access")
 - Strings that say "this app" instead of the app name or a specific feature
 
-**Good examples**: "Ara uses the camera to capture photos of whiteboards, sketches, and
+**Good examples**: "MyApp uses the camera to capture photos of whiteboards, sketches, and
 references for your ideas." — specific feature, specific use case.
 
 **Severity**: WARNING

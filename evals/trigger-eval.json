@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "My app just got rejected by App Review with guideline 5.1.1 — they said I'm missing a privacy manifest. The project is at /Users/justinperea/Documents/Projects/ara/ara.xcodeproj. Can you check what's wrong and tell me what PrivacyInfo.xcprivacy entries I need to add? I'm using URLSession and UserDefaults directly.",
+    "query": "My app just got rejected by App Review with guideline 5.1.1 — they said I'm missing a privacy manifest. The project is at ~/Projects/MyApp/MyApp.xcodeproj. Can you check what's wrong and tell me what PrivacyInfo.xcprivacy entries I need to add? I'm using URLSession and UserDefaults directly.",
     "should_trigger": true
   },
   {
@@ -20,7 +20,7 @@
     "should_trigger": true
   },
   {
-    "query": "We're preparing our iPad app for App Store submission. It uses the camera for document scanning, accesses the photo library, and sends push notifications. I want to make sure the NSCameraUsageDescription, NSPhotoLibraryUsageDescription, and all the other privacy strings are actually present and descriptive enough. Project path is /Users/justinperea/Work/DocScanner.",
+    "query": "We're preparing our iPad app for App Store submission. It uses the camera for document scanning, accesses the photo library, and sends push notifications. I want to make sure the NSCameraUsageDescription, NSPhotoLibraryUsageDescription, and all the other privacy strings are actually present and descriptive enough. Project path is ~/Projects/DocScanner.",
     "should_trigger": true
   },
   {
@@ -32,7 +32,7 @@
     "should_trigger": true
   },
   {
-    "query": "My Info.plist seems like it's missing a bunch of stuff. The app uses background audio, background fetch, and remote notifications, but I don't think I declared the UIBackgroundModes correctly. It's a podcast app at /Users/justinperea/Projects/PodStream — can you review the plist and entitlements for anything App Review would flag?",
+    "query": "My Info.plist seems like it's missing a bunch of stuff. The app uses background audio, background fetch, and remote notifications, but I don't think I declared the UIBackgroundModes correctly. It's a podcast app at ~/Projects/PodStream — can you review the plist and entitlements for anything App Review would flag?",
     "should_trigger": true
   },
   {
